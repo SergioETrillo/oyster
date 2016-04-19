@@ -3,6 +3,7 @@ require "oystercard"
 describe Oystercard do
   let(:entry_station) { double(:entry_station) }
   let(:exit_station) { double(:exit_station) }
+  let(:journey) { {entry_station: entry_station, exit_station: exit_station} }
   let(:loaded_card) do
     loaded_card = subject
     loaded_card.top_up(Oystercard::MAX_BALANCE)
@@ -90,11 +91,10 @@ describe Oystercard do
   end
 
   context "storing journey history" do
-    it "stores a journey " do
+    it "stores a journey in journeys list" do
       loaded_card.touch_in(entry_station)
       loaded_card.touch_out(exit_station)
-      expect(loaded_card.journeys.last.keys).to eq entry_station
-      expect(loaded_card.journeys.last.values).to eq exit_station
+      expect(loaded_card.journeys.last).to eq journey
     end
   end
 end
