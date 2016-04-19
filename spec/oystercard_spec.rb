@@ -14,10 +14,6 @@ describe Oystercard do
     it "has balance 0" do
       expect(subject.balance).to eq 0
     end
-
-    it "has an empty list of journeys" do
-      expect(subject.journeys).to be_empty
-    end
   end
 
   context "#top_up" do
