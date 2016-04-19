@@ -2,10 +2,20 @@ require "oystercard"
 
 describe Oystercard do
   let(:entry_station) { double(:entry_station) }
+  let(:exit_station) { double(:exit_station) }
+  let(:loaded_card) do
+    loaded_card = subject
+    loaded_card.top_up(Oystercard::MAX_BALANCE)
+    loaded_card
+  end
 
   context "when new card" do
     it "has balance 0" do
       expect(subject.balance).to eq 0
+    end
+
+    it "has an empty list of journeys" do
+      expect(subject.journeys).to be_empty
     end
   end
 
@@ -21,9 +31,8 @@ describe Oystercard do
 
   context "maximum limit of £90 on balances" do
     it "raises error when top_up exceeds max balance " do
-      subject.top_up(Oystercard::MAX_BALANCE)
       error_max = Oystercard::ERR_MAX_BALANCE
-      expect{ subject.top_up(1) }.to raise_error error_max
+      expect{ loaded_card.top_up(1) }.to raise_error error_max
     end
   end
 
@@ -80,4 +89,12 @@ describe Oystercard do
     end
   end
 
+  context "storing journey history" do
+    it "stores a journey " do
+      loaded_card.touch_in(entry_station)
+      loaded_card.touch_out(exit_station)
+      expect(loaded_card.journeys.last.keys).to eq entry_station
+      expect(loaded_card.journeys.last.values).to eq exit_station
+    end
+  end
 end
