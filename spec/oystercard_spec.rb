@@ -57,7 +57,7 @@ describe Oystercard do
 
     it "when touch in then out card is not in-journey" do
       subject.touch_in(entry_station)
-      subject.touch_out
+      subject.touch_out(exit_station)
       expect(subject.in_journey?).to be false
     end
   end
@@ -70,7 +70,7 @@ describe Oystercard do
 
   context "paying for journeys" do
     it "deducts the right amount when touch out" do
-      expect{ subject.touch_out }.to change{ subject.balance }.by -Oystercard::MIN_CHARGE
+      expect{ subject.touch_out(exit_station) }.to change{ subject.balance }.by -Oystercard::MIN_CHARGE
     end
   end
 
@@ -84,7 +84,7 @@ describe Oystercard do
     it "forgets entry station when touch out" do
       subject.top_up(Oystercard::MAX_BALANCE)
       subject.touch_in(entry_station)
-      subject.touch_out
+      subject.touch_out(exit_station)
       expect(subject.entry_station).to be nil
     end
   end
