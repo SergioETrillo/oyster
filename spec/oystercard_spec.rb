@@ -21,4 +21,7 @@ describe Oystercard do
   		expect {oystercard.top_up(1)}.to raise_error "maximum balance of #{card_max} exceeded"
 	end
 
+	it "deducts a journey fare from the balance" do
+		expect{oystercard.deduct(5)}.to change{oystercard.balance}.by -5
+	end
 end
