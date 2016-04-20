@@ -28,11 +28,11 @@ describe Journey do
     it 'completes journey' do
       expect(journey).to be_complete
     end
-    it 'updates the history' do
-      journey.start_journey(starting_station)
-      journey.end_journey(ending_station)
-      expect((journey.get_history).last).to eq({starting_station: starting_station, ending_station: ending_station})
-    end
+    # it 'updates the history' do
+    #   journey.start_journey(starting_station)
+    #   journey.end_journey(ending_station)
+    #   expect((journey.get_history).last).to eq({starting_station: starting_station, ending_station: ending_station})
+    # end
   end
 
   context 'calculating fare' do
