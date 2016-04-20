@@ -1,4 +1,7 @@
 class Journey
+
+  MINIMUM_FARE = 1
+  PENALTY = 6
   attr_reader :current, :starting_station, :ending_station
 
   @@history ||= []
@@ -27,5 +30,14 @@ class Journey
   def get_history
     @@history
   end
+
+  def correct?
+    @current[:starting_station] && @current[:ending_station]
+  end
+
+  def fare
+    correct? ? MINIMUM_FARE : PENALTY
+  end
+
 
 end
