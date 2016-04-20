@@ -1,6 +1,7 @@
 class Journey
   attr_reader :current, :starting_station, :ending_station
-  @@history = []
+
+  @@history ||= []
 
   def initialize
     @starting_station = nil
@@ -14,7 +15,9 @@ class Journey
 
   def end_journey(station)
     @current[:ending_station] = station
-    @@history << current
+    @@history << current.dup
+    @current
+    # @current = {}
   end
 
   def complete?
