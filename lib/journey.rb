@@ -14,7 +14,7 @@ class Journey
 
   def end_journey(station)
     @current[:ending_station] = station
-    @@history << current
+    @@history.push(current)
   end
 
   def complete?
