@@ -15,16 +15,10 @@ describe JourneyLog do
     end
   end
 
-  it 'updates the history on touch out' do
-    journeylog.journey.start_journey(starting_station)
-    journeylog.journey.end_journey(ending_station)
-    expect((journeylog.journey.get_history).last).to eq(current_journey)
-  end
-
   it 'adds the current journey' do
     journeylog.journey.start_journey(starting_station)
     journeylog.journey.end_journey(ending_station)
-    journeylog.update_history
+    journeylog.update_history(current_journey)
     expect(journeylog.get_history.last).to eq current_journey
   end
 
