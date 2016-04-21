@@ -12,7 +12,7 @@ class JourneyLog
   def get_history
     @history
   end
-private
+
   def update_history
     @history << journey.current.dup
   end

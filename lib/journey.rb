@@ -36,7 +36,15 @@ class Journey
   end
 
   def fare
-    correct? ? MINIMUM_FARE : PENALTY
+    #correct? ? MINIMUM_FARE : PENALTY
+    fare_by_zone(current)
+  end
+
+  private
+
+  def fare_by_zone(current)
+    return PENALTY unless correct?
+    1 + ( current[:starting_station].zone - current[:ending_station].zone ).abs
   end
 
 
