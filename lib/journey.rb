@@ -19,6 +19,10 @@ class Journey
     @current
   end
 
+  def clean
+    @current ={}
+  end
+
   def complete?
     !!@current[:ending_station]
   end

@@ -21,7 +21,8 @@ class Oystercard
     if previous_action == :out || previous_action == nil
       @journey.start_journey(station)
     else
-      @journeylog.update_history(journey.current)
+      p "after a touch in, journey.current is: #{journey.current}"
+      @journeylog.update_history(@journey.current)
       deduct(@journey.fare)
       @journey.start_journey(station)
     end
@@ -29,9 +30,18 @@ class Oystercard
   end
 
   def touch_out(station)
-    @journey.end_journey(station)
-    @journeylog.update_history(journey.current)
-    deduct(@journey.fare)
+    if @previous_action == :in
+      @journey.end_journey(station)
+      @journeylog.update_history(@journey.current)
+      deduct(@journey.fare)
+      @journey.clean
+    else
+      p "after incorrect touch out, journey current is: #{journey.current}"
+      @journey.end_journey(station)
+      @journeylog.update_history(@journey.current)
+      deduct(@journey.fare)
+      @journey.clean
+    end
     @previous_action = :out
   end
 

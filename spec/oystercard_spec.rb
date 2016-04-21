@@ -40,4 +40,8 @@ describe Oystercard do
       expect { oystercard.touch_in(starting_station) }.to raise_error "Insufficient balance for journey"
     end
   end
+
+  context 'edge cases' do
+    it 'stores proper'
+  end
 end
