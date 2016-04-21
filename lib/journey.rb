@@ -9,12 +9,12 @@ class Journey
 
   def start_journey(entry_station)
   	self.journey[:entry_station] = entry_station
-    entry_station
+    @entry_station = entry_station
   end
 
   def finish_journey(exit_station)
   	self.journey[:exit_station] = exit_station
-    exit_station
+    @exit_station = exit_station
   end
 
   def journey_complete?
