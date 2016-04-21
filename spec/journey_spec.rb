@@ -5,8 +5,9 @@ describe Journey do
 
   let(:starting_station) { double :starting_station, zone: 1 }
   let(:ending_station)  { double :ending_station, zone: 1 }
-  let(:station_random_zone) {double :stationz4, zone: rand(9)}
-  let(:stationz7) {double :stationz4, zone: 7}
+  let(:station_random1) {double :station_random1, zone: rand(9)}
+  let(:station_random2) {double :station_random2, zone: rand(9)}
+  # let(:stationz7) {double :stationz4, zone: 7}
   let(:stationz3) {double :stationz4, zone: 3}
 
   context 'when setting up' do
@@ -40,13 +41,11 @@ describe Journey do
 
   context 'calculating journey fares' do
     before(:each) do
-      @correct_fare = (starting_station.zone - ending_station.zone).abs + 1
-      #p "corect fare: #{@correct_fare}"
-
+      @correct_fare = (station_random1.zone - station_random2.zone).abs + 1
     end
     it 'MINIMUM_FARE for two stations within same zone' do
-      journey.start_journey(starting_station)
-      journey.end_journey(ending_station)
+      journey.start_journey(station_random1)
+      journey.end_journey(station_random2)
       expect(journey.fare).to eq @correct_fare
     end
 
@@ -54,6 +53,13 @@ describe Journey do
       @correct_fare = (starting_station.zone - stationz3.zone).abs + 1
       journey.start_journey(starting_station)
       journey.end_journey(stationz3)
+      expect(journey.fare).to eq @correct_fare
+    end
+
+    it 'tests correct fare calculated with random zones' do
+     @correct_fare = (station_random1.zone - station_random2.zone).abs + 1
+      journey.start_journey(station_random1)
+      journey.end_journey(station_random2)
       expect(journey.fare).to eq @correct_fare
     end
 
