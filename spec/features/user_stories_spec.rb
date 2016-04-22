@@ -38,7 +38,7 @@ describe 'user stories' do
   # As a customer
   # I need my fare deducted from my card
 
-  context 'fare is deducted from card' do
+  context 'payments' do
     before do
       oystercard.top_up(card_max)
       oystercard.touch_in(aldgate)
@@ -47,6 +47,20 @@ describe 'user stories' do
     it 'allows fare to be deducted from balance' do
       expect(oystercard.balance).to be < card_max
     end
+
+    # In order to pay for my journey
+    # As a customer
+    # I need to pay for my journey when it's complete
+
+    it 'no fare deducted on correct journeys when touch_in' do
+      expect{ loaded_card.touch_in(aldgate) }.not_to change{ loaded_card.balance }
+    end
+
+    it ' fair deducted on correct journeys at touch out' do
+      loaded_card.touch_in(aldgate)
+      expect{ loaded_card.touch_out(holborn) }.to change{ loaded_card.balance }.by -Oystercard::MINIMUM_FARE
+    end
+
   end
 
   # In order to get through the barriers
@@ -58,8 +72,26 @@ describe 'user stories' do
     it 'allows to touch in' do
       expect { loaded_card.touch_in(aldgate) }.not_to raise_error
     end
+
     it 'allows to touch out' do
       expect { loaded_card.touch_in(holborn) }.not_to raise_error
     end
+
+      # In order to pay for my journey
+      # As a customer
+      # I need to have the minimum amount for a single journey
+
+    it 'raises error if minimum balance not available' do
+      expect {oystercard.touch_in(aldgate) }.to raise_error "Insufficient balance for journey"
+    end
   end
+
+  context 'journey status information' do
+    it 'at touch_out, info about entry station is known' do
+      loaded_card.touch_in(aldgate)
+      expect {oystercard}
+    end
+  end
+
+
 end
