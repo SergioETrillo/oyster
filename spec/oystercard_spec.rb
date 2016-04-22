@@ -41,7 +41,7 @@ describe Oystercard do
     end
   end
 
-  context 'edge cases' do
-    it 'stores proper'
-  end
+  # context 'edge cases' do
+  #   it 'stores proper'
+  # end
 end
