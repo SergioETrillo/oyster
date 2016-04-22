@@ -1,44 +1,44 @@
 class Oystercard
+	MAXIMUM_BALANCE = 90
+	MINIMUM_FARE = 1
 
-  MAX_BALANCE = 90
-  MIN_CHARGE = 1
-  ERR_MAX_BALANCE = "Maximum balance exceeded".freeze
-  ERR_NO_MONEY = "Insufficient balance".freeze
+	attr_reader :balance, :journey, :journeylog, :previous_action
 
-  attr_reader :balance, :entry_station, :journeys, :journey
-
-  def initialize
+  def initialize(journeylog = JourneyLog.new)   #another option: initialize journeylog object, and initialize journey object to decouple both object, no need to make dependency, ==> update_history(journey)
+    @previous_action = :out
     @balance = 0
-    @entry_station = nil
-    @journeys = []
-    @journey = Hash.new
+		@journeylog = journeylog
+    @journey = journeylog.journey
+	end
+
+  def top_up(money)
+  	raise "maximum balance of #{MAXIMUM_BALANCE} exceeded" if money + balance > MAXIMUM_BALANCE
+		@balance += money
   end
 
-  def top_up(amount)
-    raise ERR_MAX_BALANCE if balance + amount > MAX_BALANCE
-    @balance += amount
-  end
+  def touch_in(station)
+		raise "Insufficient balance for journey" if balance < MINIMUM_FARE
 
-  def in_journey?
-    !!entry_station
-  end
-
-  def touch_in(entry_station)
-    raise ERR_NO_MONEY if balance < MIN_CHARGE
-    @entry_station = entry_station
-    journey[:entry_station] = entry_station
-  end
-
-  def touch_out(exit_station)
-    @entry_station = nil
-    deduct(MIN_CHARGE)
-    journey[:exit_station] = exit_station
-    journeys << journey
-  end
-
-  private
-
-    def deduct(fare)
-      @balance -= fare
+    if previous_action == :in
+      @journeylog.update_history(@journey.current)
+      deduct(@journey.fare)
     end
+
+    @journey.start_journey(station)
+    @previous_action = :in
+  end
+
+  def touch_out(station)
+    @journey.end_journey(station)
+    @journeylog.update_history(@journey.current)
+    deduct(@journey.fare)
+    @journey.clean
+    @previous_action = :out
+end
+
+	private
+
+	def deduct(money)
+  	@balance -= money
+  end
 end
