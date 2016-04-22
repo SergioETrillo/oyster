@@ -29,9 +29,9 @@ describe Journey do
       expect(journey.current[:ending_station]).to eq ending_station
     end
 
-    it 'completes journey' do
-      expect(journey).to be_complete
-    end
+    # # it 'completes journey' do
+    #   expect(journey).to be_complete
+    # end
     # it 'updates the history' do
     #   journey.start_journey(starting_station)
     #   journey.end_journey(ending_station)
@@ -76,18 +76,18 @@ describe Journey do
   context "correctness of journeys" do
     it "returns incorrect if no starting_station" do
       journey.end_journey(ending_station)
-      expect(journey).not_to be_correct
+      expect(journey).not_to be_complete
     end
 
     it "returns incorrect if no ending_station" do
       journey.start_journey(starting_station)
-      expect(journey).not_to be_correct
+      expect(journey).not_to be_complete
     end
 
     it "test for a correct journey" do
       journey.start_journey(starting_station)
       journey.end_journey(ending_station)
-      expect(journey).to be_correct
+      expect(journey).to be_complete
     end
   end
 end

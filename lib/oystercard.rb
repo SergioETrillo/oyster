@@ -4,8 +4,8 @@ class Oystercard
 
 	attr_reader :balance, :journey, :journeylog, :previous_action
 
-  def initialize(journeylog = JourneyLog.new)
-    @previous_action = nil
+  def initialize(journeylog = JourneyLog.new)   #another option: initialize journeylog object, and initialize journey object to decouple both object, no need to make dependency, ==> update_history(journey)
+    @previous_action = :out
     @balance = 0
 		@journeylog = journeylog
     @journey = journeylog.journey
@@ -13,50 +13,32 @@ class Oystercard
 
   def top_up(money)
   	raise "maximum balance of #{MAXIMUM_BALANCE} exceeded" if money + balance > MAXIMUM_BALANCE
-		@balance += (money)
+		@balance += money
   end
 
   def touch_in(station)
 		raise "Insufficient balance for journey" if balance < MINIMUM_FARE
-    if previous_action == :out || previous_action == nil
-      @journey.start_journey(station)
-    else
-      p "after a touch in, journey.current is: #{journey.current}"
+
+    if previous_action == :in
       @journeylog.update_history(@journey.current)
       deduct(@journey.fare)
-      @journey.start_journey(station)
     end
+
+    @journey.start_journey(station)
     @previous_action = :in
   end
 
   def touch_out(station)
-    if @previous_action == :in
-      @journey.end_journey(station)
-      @journeylog.update_history(@journey.current)
-      deduct(@journey.fare)
-      @journey.clean
-    else
-      p "after incorrect touch out, journey current is: #{journey.current}"
-      @journey.end_journey(station)
-      @journeylog.update_history(@journey.current)
-      deduct(@journey.fare)
-      @journey.clean
-    end
+    @journey.end_journey(station)
+    @journeylog.update_history(@journey.current)
+    deduct(@journey.fare)
+    @journey.clean
     @previous_action = :out
-  end
+end
 
 	private
 
 	def deduct(money)
   	@balance -= money
   end
-
-	def start_journey(station)
-    journey.start_journey(station)
-  end
-
-  def end_journey(station)
-    journey.end_journey(station)
-  end
-
 end

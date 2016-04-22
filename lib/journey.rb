@@ -16,18 +16,13 @@ class Journey
 
   def end_journey(station)
     @current[:ending_station] = station
-    @current
   end
 
   def clean
-    @current ={}
+    @current = {}
   end
 
   def complete?
-    !!@current[:ending_station]
-  end
-
-  def correct?
     @current[:starting_station] && @current[:ending_station]
   end
 
@@ -38,7 +33,7 @@ class Journey
   private
 
   def fare_by_zone(current)
-    return PENALTY unless correct?
+    return PENALTY unless complete?
     1 + ( current[:starting_station].zone - current[:ending_station].zone ).abs
   end
 

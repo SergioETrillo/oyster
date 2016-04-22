@@ -15,7 +15,7 @@ describe Oystercard do
   	  end
 
       it 'has no previous action' do
-        expect(oystercard.previous_action).to be nil
+        expect(oystercard.previous_action).to be :out
       end
 	  end
 

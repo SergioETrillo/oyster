@@ -12,7 +12,7 @@ class JourneyLog
   end
 
   def update_history(current_journey)
-    @history << journey.current.dup
-  end
+      @history << journey.current.dup
+    end
 
 end
